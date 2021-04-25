@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './SignInPage.scss';
-import { loginSuccess, loginError } from './../../actions/index';
+import { loginSuccess, loginError } from '../../actions/index';
 import axios from 'axios';
 
 const SignInPage = (props) => {
@@ -34,7 +34,7 @@ const SignInPage = (props) => {
 			.catch((error) => console.log(error));
 	};
 
-	if (props.user.token !== '') return <Redirect to='/user' />;
+	if (props.user.isLoggedIn) return <Redirect to='/user' />;
 
 	return (
 		<main className='main bg-dark'>
@@ -70,10 +70,6 @@ const SignInPage = (props) => {
 						/>
 						<label htmlFor='remember-me'>Remember me</label>
 					</div>
-					<Link to='/user' className='sign-in-button'>
-						Sign In
-					</Link>
-
 					<button className='sign-in-button'>Sign In</button>
 				</form>
 			</section>

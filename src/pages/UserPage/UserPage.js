@@ -1,16 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import axios from 'axios';
+
 import './UserPage.scss';
-
 import Account from './../../components/Account/Account';
+import { editProfile } from '../../actions/index';
 
-export default function UserPage() {
+const UserPage = (props) => {
+	useEffect(() => {
+		axios
+			.post(
+				'http://localhost:3001/api/v1/user/profile',
+				{},
+				{ headers: { Authorization: `Bearer ${props.user.token}` } }
+			)
+			.then((res) => {
+				const { firstName, lastName } = res.data.body;
+				props.editProfile(firstName, lastName);
+			})
+			.catch((error) => console.log(error));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	if (!props.user.isLoggedIn) return <Redirect to='/sign-in' />;
+
 	return (
 		<main className='main bg-dark'>
 			<div className='header'>
 				<h1>
 					Welcome back
 					<br />
-					Tony Jarvis!
+					{props.user.firstName} {props.user.lastName}!
 				</h1>
 				<button className='edit-button'>Edit Name</button>
 			</div>
@@ -32,4 +53,10 @@ export default function UserPage() {
 			/>
 		</main>
 	);
-}
+};
+
+const mapStateToProps = (state) => {
+	return { user: state.user };
+};
+
+export default connect(mapStateToProps, { editProfile })(UserPage);
