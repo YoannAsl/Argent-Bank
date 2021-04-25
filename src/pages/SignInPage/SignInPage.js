@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './SignInPage.scss';
-import { logIn } from './../../actions/index';
+import { loginSuccess, loginError } from './../../actions/index';
+import axios from 'axios';
 
 const SignInPage = (props) => {
 	const [email, setEmail] = useState('');
@@ -20,12 +21,27 @@ const SignInPage = (props) => {
 		setRememberMe(!rememberMe);
 	};
 
+	const onSubmit = (e) => {
+		e.preventDefault();
+		axios
+			.post('http://localhost:3001/api/v1/user/login', {
+				email: email,
+				password: password,
+			})
+			.then((res) => {
+				props.loginSuccess(email, password, res.data.body.token);
+			})
+			.catch((error) => console.log(error));
+	};
+
+	if (props.user.token !== '') return <Redirect to='/user' />;
+
 	return (
 		<main className='main bg-dark'>
 			<section className='sign-in-content'>
 				<i className='fa fa-user-circle sign-in-icon'></i>
 				<h1>Sign In</h1>
-				<form>
+				<form onSubmit={onSubmit}>
 					<div className='input-wrapper'>
 						<label htmlFor='username'>Username</label>
 						<input
@@ -58,15 +74,7 @@ const SignInPage = (props) => {
 						Sign In
 					</Link>
 
-					<button
-						className='sign-in-button'
-						onClick={(e) => {
-							e.preventDefault();
-							props.logIn();
-						}}
-					>
-						Sign In
-					</button>
+					<button className='sign-in-button'>Sign In</button>
 				</form>
 			</section>
 		</main>
@@ -74,9 +82,10 @@ const SignInPage = (props) => {
 };
 
 const mapStateToProps = (state) => {
-	return { isLoggedIn: state.isLoggedIn };
+	return { user: state.user };
 };
 
 export default connect(mapStateToProps, {
-	logIn,
+	loginSuccess,
+	loginError,
 })(SignInPage);
