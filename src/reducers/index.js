@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { EDIT_PROFILE, LOGIN_SUCCESS } from './../actions/index';
+import { EDIT_PROFILE, LOGIN_SUCCESS, LOGOUT } from './../actions/index';
 
 const initialState = {
 	isLoggedIn: false,
@@ -26,6 +26,8 @@ const user = (state = initialState, action) => {
 				firstName: action.payload.firstName,
 				lastName: action.payload.lastName,
 			};
+		case LOGOUT:
+			return initialState;
 		default:
 			return state;
 	}
