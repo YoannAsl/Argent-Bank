@@ -28,7 +28,7 @@ const Nav = (props) => {
 				<div>
 					<span className='main-nav-item'>
 						<i className='fa fa-user-circle'></i>
-						Tony
+						{props.user.firstName}
 					</span>
 					<Link
 						className='main-nav-item'

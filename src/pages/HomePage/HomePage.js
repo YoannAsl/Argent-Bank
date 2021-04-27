@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import securityIcon from '../../assets/images/icon-security.png';
 import moneyIcon from '../../assets/images/icon-money.png';
 import chatIcon from '../../assets/images/icon-chat.png';
@@ -31,6 +31,10 @@ const items = [
 ];
 
 export default function HomePage() {
+	useEffect(() => {
+		document.title = 'Argent Bank - Home';
+	}, []);
+
 	return (
 		<main>
 			<div className='hero'>

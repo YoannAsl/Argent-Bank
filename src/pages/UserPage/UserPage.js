@@ -26,6 +26,7 @@ const accounts = [
 ];
 
 const UserPage = (props) => {
+	// Gets profile information
 	useEffect(() => {
 		axios
 			.post(
@@ -40,6 +41,11 @@ const UserPage = (props) => {
 			.catch((error) => console.log(error));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	// Updates document title
+	useEffect(() => {
+		document.title = `Argent Bank - ${props.user.firstName} ${props.user.lastName} `;
+	}, [props.user]);
 
 	if (!props.user.isLoggedIn) return <Redirect to='/sign-in' />;
 
