@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import Nav from './components/Nav/Nav';
 import HomePage from './pages/HomePage/HomePage';
 import Footer from './components/Footer/Footer';
-import SignInPage from './pages/SignInPage/SignInPage';
+import LoginPage from './pages/LoginPage/LoginPage';
 import UserPage from './pages/UserPage/UserPage';
 
 function App() {
@@ -14,8 +14,8 @@ function App() {
 				<Route exact path='/'>
 					<HomePage />
 				</Route>
-				<Route path='/sign-in'>
-					<SignInPage />
+				<Route path='/login'>
+					<LoginPage />
 				</Route>
 				<Route path='/user'>
 					<UserPage />

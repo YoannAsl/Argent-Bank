@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import './SignInPage.scss';
+import './LoginPage.scss';
 import { loginSuccess, loginError } from '../../actions/index';
 import axios from 'axios';
 
-const SignInPage = (props) => {
+const LoginPage = (props) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
@@ -88,4 +88,4 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
 	loginSuccess,
 	loginError,
-})(SignInPage);
+})(LoginPage);

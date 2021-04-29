@@ -47,7 +47,7 @@ const UserPage = (props) => {
 		document.title = `Argent Bank - ${props.user.firstName} ${props.user.lastName} `;
 	}, [props.user]);
 
-	if (!props.user.isLoggedIn) return <Redirect to='/sign-in' />;
+	if (!props.user.isLoggedIn) return <Redirect to='/login' />;
 
 	return (
 		<main className='main bg-dark'>
