@@ -38,7 +38,7 @@ const LoginPage = (props) => {
 			.catch((error) => console.log(error));
 	};
 
-	if (props.user.isLoggedIn) return <Redirect to='/user' />;
+	if (props.user.isLoggedIn) return <Redirect to='/profile' />;
 
 	return (
 		<main className='main bg-dark'>

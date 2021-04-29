@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 
-import './UserPage.scss';
-import Account from './../../components/Account/Account';
+import './ProfilePage.scss';
+import Account from '../../components/Account/Account';
 import { editProfile } from '../../actions/index';
 
 const accounts = [
@@ -25,7 +25,7 @@ const accounts = [
 	},
 ];
 
-const UserPage = (props) => {
+const ProfilePage = (props) => {
 	// Gets profile information
 	useEffect(() => {
 		axios
@@ -76,4 +76,4 @@ const mapStateToProps = (state) => {
 	return { user: state.user };
 };
 
-export default connect(mapStateToProps, { editProfile })(UserPage);
+export default connect(mapStateToProps, { editProfile })(ProfilePage);

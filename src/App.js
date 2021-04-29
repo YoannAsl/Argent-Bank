@@ -4,7 +4,7 @@ import Nav from './components/Nav/Nav';
 import HomePage from './pages/HomePage/HomePage';
 import Footer from './components/Footer/Footer';
 import LoginPage from './pages/LoginPage/LoginPage';
-import UserPage from './pages/UserPage/UserPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 
 function App() {
 	return (
@@ -17,8 +17,8 @@ function App() {
 				<Route path='/login'>
 					<LoginPage />
 				</Route>
-				<Route path='/user'>
-					<UserPage />
+				<Route path='/profile'>
+					<ProfilePage />
 				</Route>
 				<Footer />
 			</BrowserRouter>
