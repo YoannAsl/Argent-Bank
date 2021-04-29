@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import axios from 'axios';
@@ -26,6 +26,12 @@ const accounts = [
 ];
 
 const ProfilePage = (props) => {
+	const [isEditing, setIsEditing] = useState(false);
+	const [editedName, setEditedName] = useState({
+		firstName: '',
+		lastName: '',
+	});
+
 	// Gets profile information
 	useEffect(() => {
 		axios
@@ -47,18 +53,80 @@ const ProfilePage = (props) => {
 		document.title = `Argent Bank - ${props.user.firstName} ${props.user.lastName} `;
 	}, [props.user]);
 
+	const onSubmit = (e) => {
+		e.preventDefault();
+
+		// Both fields have to not be empty
+		if (editedName.firstName && editedName.lastName !== '') {
+			axios
+				.put(
+					'http://localhost:3001/api/v1/user/profile',
+					{
+						firstName: editedName.firstName,
+						lastName: editedName.lastName,
+					},
+					{ headers: { Authorization: `Bearer ${props.user.token}` } }
+				)
+				.then(
+					props.editProfile(editedName.firstName, editedName.lastName)
+				)
+				.catch((error) => console.log(error));
+
+			setEditedName({ firstName: '', lastName: '' });
+			setIsEditing(false);
+		}
+	};
+
+	const onChange = (e) => {
+		e.target.id === 'firstName'
+			? setEditedName({ ...editedName, firstName: e.target.value })
+			: setEditedName({ ...editedName, lastName: e.target.value });
+	};
+
 	if (!props.user.isLoggedIn) return <Redirect to='/login' />;
 
 	return (
 		<main className='main bg-dark'>
-			<div className='header'>
-				<h1>
-					Welcome back
-					<br />
-					{props.user.firstName} {props.user.lastName}!
-				</h1>
-				<button className='edit-button'>Edit Name</button>
-			</div>
+			{!isEditing ? (
+				<div className='header'>
+					<h1>
+						Welcome back
+						<br />
+						{props.user.firstName} {props.user.lastName}!
+					</h1>
+					<button
+						className='edit-button'
+						onClick={() => setIsEditing(true)}
+					>
+						Edit Name
+					</button>
+				</div>
+			) : (
+				<div className='header'>
+					<h1>Welcome back</h1>
+					<form onSubmit={onSubmit}>
+						<input
+							id='firstName'
+							type='text'
+							placeholder={props.user.firstName}
+							value={editedName.firstName}
+							onChange={onChange}
+						/>
+						<input
+							id='lastName'
+							type='text'
+							placeholder={props.user.lastName}
+							value={editedName.lastName}
+							onChange={onChange}
+						/>
+						<button type='submit'>Save</button>
+						<button onClick={() => setIsEditing(false)}>
+							Cancel
+						</button>
+					</form>
+				</div>
+			)}
+
 			<h2 className='sr-only'>Accounts</h2>
 			{accounts.map((account, index) => (
 				<Account
