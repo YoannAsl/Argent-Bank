@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 
@@ -25,7 +25,10 @@ const accounts = [
 	},
 ];
 
-const ProfilePage = (props) => {
+const ProfilePage = () => {
+	const user = useSelector((state) => state.user);
+	const dispatch = useDispatch();
+
 	const [isEditing, setIsEditing] = useState(false);
 	const [editedName, setEditedName] = useState({
 		firstName: '',
@@ -38,20 +41,19 @@ const ProfilePage = (props) => {
 			.post(
 				'http://localhost:3001/api/v1/user/profile',
 				{},
-				{ headers: { Authorization: `Bearer ${props.user.token}` } }
+				{ headers: { Authorization: `Bearer ${user.token}` } }
 			)
 			.then((res) => {
 				const { firstName, lastName } = res.data.body;
-				props.editProfile(firstName, lastName);
+				dispatch(editProfile(firstName, lastName));
 			})
 			.catch((error) => console.log(error));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [dispatch, user.token]);
 
 	// Updates document title
 	useEffect(() => {
-		document.title = `Argent Bank - ${props.user.firstName} ${props.user.lastName} `;
-	}, [props.user]);
+		document.title = `Argent Bank - ${user.firstName} ${user.lastName} `;
+	}, [user]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -65,10 +67,12 @@ const ProfilePage = (props) => {
 						firstName: editedName.firstName,
 						lastName: editedName.lastName,
 					},
-					{ headers: { Authorization: `Bearer ${props.user.token}` } }
+					{ headers: { Authorization: `Bearer ${user.token}` } }
 				)
 				.then(
-					props.editProfile(editedName.firstName, editedName.lastName)
+					dispatch(
+						editProfile(editedName.firstName, editedName.lastName)
+					)
 				)
 				.catch((error) => console.log(error));
 
@@ -83,7 +87,7 @@ const ProfilePage = (props) => {
 			: setEditedName({ ...editedName, lastName: e.target.value });
 	};
 
-	if (!props.user.isLoggedIn) return <Redirect to='/login' />;
+	if (!user.isLoggedIn) return <Redirect to='/login' />;
 
 	return (
 		<main className='main bg-dark'>
@@ -92,7 +96,7 @@ const ProfilePage = (props) => {
 					<h1>
 						Welcome back
 						<br />
-						{props.user.firstName} {props.user.lastName}!
+						{user.firstName} {user.lastName}!
 					</h1>
 					<button
 						className='edit-button'
@@ -105,24 +109,33 @@ const ProfilePage = (props) => {
 				<div className='header'>
 					<h1>Welcome back</h1>
 					<form onSubmit={onSubmit}>
-						<input
-							id='firstName'
-							type='text'
-							placeholder={props.user.firstName}
-							value={editedName.firstName}
-							onChange={onChange}
-						/>
-						<input
-							id='lastName'
-							type='text'
-							placeholder={props.user.lastName}
-							value={editedName.lastName}
-							onChange={onChange}
-						/>
-						<button type='submit'>Save</button>
-						<button onClick={() => setIsEditing(false)}>
-							Cancel
-						</button>
+						<div>
+							<input
+								id='firstName'
+								type='text'
+								placeholder={user.firstName}
+								value={editedName.firstName}
+								onChange={onChange}
+							/>
+							<input
+								id='lastName'
+								type='text'
+								placeholder={user.lastName}
+								value={editedName.lastName}
+								onChange={onChange}
+							/>
+						</div>
+						<div>
+							<button className='edit-button' type='submit'>
+								Save
+							</button>
+							<button
+								className='edit-button'
+								onClick={() => setIsEditing(false)}
+							>
+								Cancel
+							</button>
+						</div>
 					</form>
 				</div>
 			)}
@@ -140,8 +153,4 @@ const ProfilePage = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
-	return { user: state.user };
-};
-
-export default connect(mapStateToProps, { editProfile })(ProfilePage);
+export default ProfilePage;

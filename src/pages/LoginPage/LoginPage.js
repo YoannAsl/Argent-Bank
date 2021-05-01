@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './LoginPage.scss';
 import { loginSuccess, loginError } from '../../actions/index';
 import axios from 'axios';
 
-const LoginPage = (props) => {
+const LoginPage = () => {
+	const user = useSelector((state) => state.user);
+	const dispatch = useDispatch();
+
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
@@ -21,10 +24,6 @@ const LoginPage = (props) => {
 			: setPassword(e.target.value);
 	};
 
-	const onToggle = () => {
-		setRememberMe(!rememberMe);
-	};
-
 	const onSubmit = (e) => {
 		e.preventDefault();
 		axios
@@ -33,12 +32,13 @@ const LoginPage = (props) => {
 				password: password,
 			})
 			.then((res) => {
-				props.loginSuccess(email, password, res.data.body.token);
+				dispatch(loginSuccess(email, password, res.data.body.token));
 			})
 			.catch((error) => console.log(error));
 	};
 
-	if (props.user.isLoggedIn) return <Redirect to='/profile' />;
+	console.log(rememberMe);
+	if (user.isLoggedIn) return <Redirect to='/profile' />;
 
 	return (
 		<main className='main bg-dark'>
@@ -70,7 +70,7 @@ const LoginPage = (props) => {
 						<input
 							type='checkbox'
 							id='remember-me'
-							onChange={onToggle}
+							onChange={() => setRememberMe(!rememberMe)}
 						/>
 						<label htmlFor='remember-me'>Remember me</label>
 					</div>
@@ -81,11 +81,4 @@ const LoginPage = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
-	return { user: state.user };
-};
-
-export default connect(mapStateToProps, {
-	loginSuccess,
-	loginError,
-})(LoginPage);
+export default LoginPage;

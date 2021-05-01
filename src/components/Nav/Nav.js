@@ -2,11 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Nav.scss';
 import logo from '../../assets/images/argentBankLogo.png';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { logOut } from '../../actions/index';
 
-const Nav = (props) => {
+const Nav = () => {
+	const user = useSelector((state) => state.user);
+	const dispatch = useDispatch();
+
 	return (
 		<nav className='main-nav'>
 			<Link className='main-nav-logo' to='./'>
@@ -17,7 +20,7 @@ const Nav = (props) => {
 				/>
 				<h1 className='sr-only'>Argent Bank</h1>
 			</Link>
-			{!props.user.isLoggedIn ? (
+			{!user.isLoggedIn ? (
 				<div>
 					<Link className='main-nav-item' to='/login'>
 						<i className='fa fa-user-circle'></i>
@@ -28,12 +31,12 @@ const Nav = (props) => {
 				<div>
 					<span className='main-nav-item'>
 						<i className='fa fa-user-circle'></i>
-						{props.user.firstName}
+						{user.firstName}
 					</span>
 					<Link
 						className='main-nav-item'
 						to='/'
-						onClick={props.logOut}
+						onClick={() => dispatch(logOut())}
 					>
 						<i className='fa fa-sign-out'></i>
 						Sign Out
@@ -44,8 +47,4 @@ const Nav = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
-	return { user: state.user };
-};
-
-export default connect(mapStateToProps, { logOut })(Nav);
+export default Nav;
