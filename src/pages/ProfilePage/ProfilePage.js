@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
-import axios from 'axios';
 
 import './ProfilePage.scss';
 import Account from '../../components/Account/Account';
-import { editProfile } from '../../actions/index';
+import { getUserName, editUserName } from '../../actions/index';
 
 const accounts = [
 	{
@@ -37,17 +36,7 @@ const ProfilePage = () => {
 
 	// Gets profile information
 	useEffect(() => {
-		axios
-			.post(
-				'http://localhost:3001/api/v1/user/profile',
-				{},
-				{ headers: { Authorization: `Bearer ${user.token}` } }
-			)
-			.then((res) => {
-				const { firstName, lastName } = res.data.body;
-				dispatch(editProfile(firstName, lastName));
-			})
-			.catch((error) => console.log(error));
+		dispatch(getUserName(user.token));
 	}, [dispatch, user.token]);
 
 	// Updates document title
@@ -60,21 +49,13 @@ const ProfilePage = () => {
 
 		// Both fields have to not be empty
 		if (editedName.firstName && editedName.lastName !== '') {
-			axios
-				.put(
-					'http://localhost:3001/api/v1/user/profile',
-					{
-						firstName: editedName.firstName,
-						lastName: editedName.lastName,
-					},
-					{ headers: { Authorization: `Bearer ${user.token}` } }
+			dispatch(
+				editUserName(
+					editedName.firstName,
+					editedName.lastName,
+					user.token
 				)
-				.then(
-					dispatch(
-						editProfile(editedName.firstName, editedName.lastName)
-					)
-				)
-				.catch((error) => console.log(error));
+			);
 
 			setEditedName({ firstName: '', lastName: '' });
 			setIsEditing(false);
@@ -82,7 +63,7 @@ const ProfilePage = () => {
 	};
 
 	const onChange = (e) => {
-		e.target.id === 'firstName'
+		e.target.id === 'firstNameInput'
 			? setEditedName({ ...editedName, firstName: e.target.value })
 			: setEditedName({ ...editedName, lastName: e.target.value });
 	};
@@ -111,14 +92,14 @@ const ProfilePage = () => {
 					<form onSubmit={onSubmit}>
 						<div>
 							<input
-								id='firstName'
+								id='firstNameInput'
 								type='text'
 								placeholder={user.firstName}
 								value={editedName.firstName}
 								onChange={onChange}
 							/>
 							<input
-								id='lastName'
+								id='lastNameInput'
 								type='text'
 								placeholder={user.lastName}
 								value={editedName.lastName}

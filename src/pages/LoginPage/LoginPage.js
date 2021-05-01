@@ -3,8 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './LoginPage.scss';
-import { loginSuccess, loginError } from '../../actions/index';
-import axios from 'axios';
+import { loginRequest } from '../../actions/index';
 
 const LoginPage = () => {
 	const user = useSelector((state) => state.user);
@@ -26,18 +25,9 @@ const LoginPage = () => {
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-		axios
-			.post('http://localhost:3001/api/v1/user/login', {
-				email: email,
-				password: password,
-			})
-			.then((res) => {
-				dispatch(loginSuccess(email, password, res.data.body.token));
-			})
-			.catch((error) => console.log(error));
+		dispatch(loginRequest(email, password));
 	};
 
-	console.log(rememberMe);
 	if (user.isLoggedIn) return <Redirect to='/profile' />;
 
 	return (

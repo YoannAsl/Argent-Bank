@@ -1,26 +1,39 @@
 import { combineReducers } from 'redux';
-import { EDIT_PROFILE, LOGIN_SUCCESS, LOGOUT } from './../actions/index';
+import {
+	EDIT_USER_NAME,
+	LOGIN_SUCCESS,
+	LOGOUT,
+	LOGIN_REQUEST,
+	LOGIN_ERROR,
+} from './../actions/index';
 
 const initialState = {
+	isLoading: false,
 	isLoggedIn: false,
 	email: '',
 	password: '',
 	token: '',
 	firstName: '',
 	lastName: '',
+	error: null,
 };
 
 const user = (state = initialState, action) => {
 	switch (action.type) {
+		case LOGIN_REQUEST:
+			return { ...state, isLoading: true, error: null };
 		case LOGIN_SUCCESS:
 			return {
 				...state,
 				isLoggedIn: true,
+				isLoading: false,
 				email: action.payload.email,
 				password: action.payload.password,
 				token: action.payload.token,
 			};
-		case EDIT_PROFILE:
+		case LOGIN_ERROR:
+			return { ...state, isLoading: false, error: action.error };
+		case EDIT_USER_NAME:
 			return {
 				...state,
 				firstName: action.payload.firstName,
