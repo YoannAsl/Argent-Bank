@@ -6,6 +6,10 @@ export const LOGIN_ERROR = 'auth/LOGIN_ERROR';
 export const LOGOUT = 'auth/LOGOUT';
 export const EDIT_USER_NAME = 'profile/EDIT_USER_NAME';
 
+/**
+ * @param {string} email
+ * @param {string} password
+ */
 export const loginRequest = (email, password) => {
 	return async (dispatch) => {
 		dispatch({ type: LOGIN_REQUEST });
@@ -18,6 +22,11 @@ export const loginRequest = (email, password) => {
 	};
 };
 
+/**
+ * @param {string} email
+ * @param {string} password
+ * @param {string} token
+ */
 export const loginSuccess = (email, password, token) => {
 	return {
 		type: LOGIN_SUCCESS,
@@ -29,6 +38,9 @@ export const loginSuccess = (email, password, token) => {
 	};
 };
 
+/**
+ * @param {string} error
+ */
 export const loginError = (error) => {
 	return {
 		type: LOGIN_ERROR,
@@ -36,6 +48,9 @@ export const loginError = (error) => {
 	};
 };
 
+/**
+ * @param {string} token
+ */
 export const getUserName = (token) => {
 	return async (dispatch) => {
 		try {
@@ -57,6 +72,11 @@ export const getUserName = (token) => {
 	};
 };
 
+/**
+ * @param {string} firstName
+ * @param {string} lastName
+ * @param {string} token
+ */
 export const editUserName = (firstName, lastName, token) => {
 	return async (dispatch) => {
 		try {
