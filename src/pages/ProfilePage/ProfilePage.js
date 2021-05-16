@@ -90,7 +90,7 @@ const ProfilePage = () => {
 				<div className='header'>
 					<h1>Welcome back</h1>
 					<form onSubmit={onSubmit}>
-						<div>
+						<div className='inputs'>
 							<input
 								id='firstNameInput'
 								type='text'
@@ -106,7 +106,7 @@ const ProfilePage = () => {
 								onChange={onChange}
 							/>
 						</div>
-						<div>
+						<div className='buttons'>
 							<button className='edit-button' type='submit'>
 								Save
 							</button>
