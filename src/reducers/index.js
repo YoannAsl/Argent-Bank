@@ -8,31 +8,31 @@ import {
 } from './../actions/index';
 
 const initialState = {
-	isLoading: false,
+	isLoggingIn: false,
 	isLoggedIn: false,
+	error: null,
 	email: '',
 	password: '',
 	token: '',
 	firstName: '',
 	lastName: '',
-	error: null,
 };
 
 const user = (state = initialState, action) => {
 	switch (action.type) {
 		case LOGIN_REQUEST:
-			return { ...state, isLoading: true, error: null };
+			return { ...state, isLoggingIn: true };
 		case LOGIN_SUCCESS:
 			return {
 				...state,
 				isLoggedIn: true,
-				isLoading: false,
+				isLoggingIn: false,
 				email: action.payload.email,
 				password: action.payload.password,
 				token: action.payload.token,
 			};
 		case LOGIN_ERROR:
-			return { ...state, isLoading: false, error: action.error };
+			return { ...state, isLoggedIn: false, error: action.error };
 		case EDIT_USER_NAME:
 			return {
 				...state,
