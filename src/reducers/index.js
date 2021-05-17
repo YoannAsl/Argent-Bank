@@ -5,6 +5,7 @@ import {
 	LOGOUT,
 	LOGIN_REQUEST,
 	LOGIN_ERROR,
+	EDIT_USER_NAME_ERROR,
 } from './../actions/index';
 
 const initialState = {
@@ -21,7 +22,13 @@ const initialState = {
 const user = (state = initialState, action) => {
 	switch (action.type) {
 		case LOGIN_REQUEST:
-			return { ...state, isLoggingIn: true };
+			return {
+				...state,
+				isLoggingIn: true,
+				// resets state
+				isLoggedIn: false,
+				error: null,
+			};
 		case LOGIN_SUCCESS:
 			return {
 				...state,
@@ -32,13 +39,15 @@ const user = (state = initialState, action) => {
 				token: action.payload.token,
 			};
 		case LOGIN_ERROR:
-			return { ...state, isLoggedIn: false, error: action.error };
+			return { ...state, error: action.error };
 		case EDIT_USER_NAME:
 			return {
 				...state,
 				firstName: action.payload.firstName,
 				lastName: action.payload.lastName,
 			};
+		case EDIT_USER_NAME_ERROR:
+			return { ...state, error: action.error };
 		case LOGOUT:
 			return initialState;
 		default:

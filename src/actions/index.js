@@ -5,6 +5,7 @@ export const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'auth/LOGIN_ERROR';
 export const LOGOUT = 'auth/LOGOUT';
 export const EDIT_USER_NAME = 'profile/EDIT_USER_NAME';
+export const EDIT_USER_NAME_ERROR = 'profile/EDIT_USER_NAME_ERROR';
 
 /**
  * @param {string} email
@@ -67,7 +68,7 @@ export const getUserName = (token) => {
 				},
 			});
 		} catch (error) {
-			console.log(error);
+			editUserNameError(error);
 		}
 	};
 };
@@ -93,8 +94,18 @@ export const editUserName = (firstName, lastName, token) => {
 				},
 			});
 		} catch (error) {
-			console.log(error);
+			editUserNameError(error);
 		}
+	};
+};
+
+/**
+ * @param {string} error
+ */
+export const editUserNameError = (error) => {
+	return {
+		type: EDIT_USER_NAME_ERROR,
+		error,
 	};
 };
 
