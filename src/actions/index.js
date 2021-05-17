@@ -68,7 +68,7 @@ export const getUserName = (token) => {
 				},
 			});
 		} catch (error) {
-			editUserNameError(error);
+			dispatch(editUserNameError(error));
 		}
 	};
 };
@@ -94,7 +94,7 @@ export const editUserName = (firstName, lastName, token) => {
 				},
 			});
 		} catch (error) {
-			editUserNameError(error);
+			dispatch(editUserNameError(error));
 		}
 	};
 };
