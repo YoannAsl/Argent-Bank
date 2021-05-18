@@ -56,7 +56,7 @@ const ProfilePage = () => {
 					user.token
 				)
 			);
-
+			// Resets local state
 			setEditedName({ firstName: '', lastName: '' });
 			setIsEditing(false);
 		}
@@ -68,7 +68,7 @@ const ProfilePage = () => {
 			: setEditedName({ ...editedName, lastName: e.target.value });
 	};
 
-	if (!user.isLoggedIn) return <Redirect to='/login' />;
+	if (!user.isLoggedIn) return <Redirect to='/' />;
 
 	return (
 		<main className='main bg-dark'>

@@ -25,9 +25,6 @@ const user = (state = initialState, action) => {
 			return {
 				...state,
 				isLoggingIn: true,
-				// resets state
-				isLoggedIn: false,
-				error: null,
 			};
 		case LOGIN_SUCCESS:
 			return {
@@ -37,6 +34,7 @@ const user = (state = initialState, action) => {
 				email: action.payload.email,
 				password: action.payload.password,
 				token: action.payload.token,
+				error: null,
 			};
 		case LOGIN_ERROR:
 			return { ...state, error: action.error };
