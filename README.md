@@ -29,3 +29,5 @@
     ```sh
     npm start
     ```
+4. Getting the backend
+- This project uses an API available with instructions [here](https://github.com/YoannAsl/Project-10-Bank-API).
